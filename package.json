@@ -1,5 +1,5 @@
 {
-  "name": "vue-i18n-gettext-tools",
+  "name": "vue-gettext-tools",
   "version": "0.0.1",
   "description": "Gettext tools for Vue.js to help extract strings and compile gettext files.",
   "main": "lib/index.js",
