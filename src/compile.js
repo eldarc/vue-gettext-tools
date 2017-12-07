@@ -1,9 +1,9 @@
-const fs = require('fs')
-const upath = require('upath')
-const deepmerge = require('deepmerge')
-const deleteKey = require('key-del')
-const gettextParser = require('gettext-parser')
-const colors = require('colors')
+import fs from 'fs'
+import upath from 'upath'
+import deepmerge from 'deepmerge'
+import deleteKey from 'key-del'
+import gettextParser from 'gettext-parser'
+import colors from 'colors'
 
 const defaultConfiguration = {
   verbose: false,

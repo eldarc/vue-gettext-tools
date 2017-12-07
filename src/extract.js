@@ -1,15 +1,16 @@
-const fs = require('fs')
-const parse5 = require('parse5')
-const {GettextExtractor, JsExtractors} = require('gettext-extractor')
+import fs from 'fs'
+import parse5 from 'parse5'
+import { GettextExtractor, JsExtractors} from 'gettext-extractor'
+import deepmerge from 'deepmerge'
+import path from 'path'
+import upath from 'upath'
+import globby from 'globby'
+import wait from 'wait-for-stuff'
+import EventEmitter from 'events'
+import colors from 'colors'
+import Vue from 'vue/dist/vue'
+
 const gettextExtractor = new GettextExtractor()
-const deepmerge = require('deepmerge')
-const path = require('path')
-const upath = require('upath')
-const globby = require('globby')
-const wait = require('wait-for-stuff')
-const EventEmitter = require('events')
-const colors = require('colors')
-const Vue = require('vue/dist/vue.js')
 const renderer = require('vue-server-renderer').createRenderer()
 
 process.env.NODE_ENV = 'production'
