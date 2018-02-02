@@ -1,6 +1,6 @@
 {
   "name": "vue-gettext-tools",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Gettext tools for Vue.js to help extract strings and compile gettext files.",
   "repository": "git@github.com:eldarc/vue-gettext-tools.git",
   "author": "Eldar Cejvanovic <eldar.cejvanovic@gmail.com>",

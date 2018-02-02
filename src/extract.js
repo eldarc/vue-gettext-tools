@@ -138,8 +138,8 @@ const _extractorFactory = (configuration) => {
     }
 
     // Get the contents of the `template` and `script` sections, if present.
-    let template = extractSPCPart('template') || null
-    const script = extractSPCPart('script') || null
+    let template = extractSPCPart('template')
+    const script = extractSPCPart('script')
 
     // If the `template` tag has an attribute value for `src` to an external .html file, try to load content of that file.
     // https://vue-loader.vuejs.org/en/start/spec.html
@@ -175,7 +175,8 @@ const _extractorFactory = (configuration) => {
     }
 
     // Parse main <script> part and push as a snippet.
-    if (script) {
+    if (Object.keys(script).length) {
+      // TODO: Check if this is working correctly.
       snippets.jsSnippets.push({
         filename,
         code: content.substr(
