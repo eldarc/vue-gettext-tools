@@ -1,6 +1,6 @@
 import fs from 'fs'
 import parse5 from 'parse5'
-import { GettextExtractor, JsExtractors} from 'gettext-extractor'
+import { GettextExtractor, JsExtractors } from 'gettext-extractor'
 import deepmerge from 'deepmerge'
 import path from 'path'
 import upath from 'upath'
@@ -71,7 +71,7 @@ const stripVData = (input) => {
 }
 
 const stripHTMLWhitespace = (input) => {
-  return input.replace(/>\s*/giu, '>').replace(/\s*</giu, '<')
+  return input.replace(/>\s{2,}/giu, '> ').replace(/\s{2,}</giu, ' <')
 }
 
 const _extractorFactory = (configuration) => {
@@ -361,7 +361,7 @@ const _extractorFactory = (configuration) => {
   const generateExpression = (keyword) => {
     // Make a list of expression for keyword.
     // Example: ['$gettext', '[this].$gettext']
-    let _variants = [`$${keyword}`, `[this].$${keyword}`]
+    let _variants = [`$${keyword}`, `[this].$${keyword}`, `_.$${keyword}`]
 
     configuration.keywordSpec[keyword].aliases.forEach((alias) => {
       if (alias !== keyword) {
@@ -465,6 +465,7 @@ const Extractor = (_configuration, sourceFiles, outputDestination) => {
     const filePaths = globby.sync(sourceFiles)
 
     filePaths.forEach((filename) => {
+      // TODO: Add .json parsing support.
       if (configuration.allowedCodeFileExtensions.includes(path.extname(filename))) {
         _extractor.gettextParser.parseFile(filename)
       } else if (configuration.allowedTemplateFileExtensions.includes(path.extname(filename))) {
