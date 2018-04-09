@@ -1,12 +1,12 @@
 import fs from 'fs'
 import parse5 from 'parse5'
 import { GettextExtractor, JsExtractors } from 'gettext-extractor'
+import { SanitizeTemplate } from './sanitize'
 import deepmerge from 'deepmerge'
 import path from 'path'
 import upath from 'upath'
 import globby from 'globby'
-import wait from 'wait-for-stuff'
-import EventEmitter from 'events'
+import deasync from 'deasync'
 import colors from 'colors'
 import Vue from 'vue/dist/vue'
 
@@ -86,9 +86,12 @@ const _extractorFactory = (configuration) => {
   supportedTagAttributes.push(configuration.attributes.comment && configuration.attributes.comment !== defaultConfiguration.attributes.comment ? configuration.attributes.comment : defaultConfiguration.attributes.comment)
 
   const parseVueFile = (filename) => {
-    const content = fs.readFileSync(filename, {
+    let content = fs.readFileSync(filename, {
       encoding: 'utf8'
     })
+
+    // Sanitize template.
+    content = SanitizeTemplate(content)
 
     // For parsing strings from components and HTML inside Single Page Components use the classic parser.
     let parsedSPC = parse5.parse(content, {locationInfo: true})
@@ -165,7 +168,7 @@ const _extractorFactory = (configuration) => {
 
           filename = src
         }
-      } catch (err) {}
+      } catch (error) {}
     }
 
     // Save all findings into a snippets collection.
@@ -240,6 +243,8 @@ const _extractorFactory = (configuration) => {
 
     // Convert HTML to an output that Vue will generate.
     function serilizeNode (content) {
+      let rendering = true
+
       const TranslateEmulated = Vue.component('i18n-helper-component', {
         template: `<div class="emulated-translate-V9rNk0G5Rj">${content}</div>`
       })
@@ -247,22 +252,21 @@ const _extractorFactory = (configuration) => {
       const component = new TranslateEmulated()
       const stream = renderer.renderToStream(component)
       let html = ''
-      const waiter = new EventEmitter()
 
       stream.on('data', data => {
         html += data.toString()
       })
 
       stream.on('end', () => {
-        waiter.emit('continue')
+        rendering = false
       })
 
       stream.on('error', () => {
         html = ''
-        waiter.emit('continue')
+        rendering = false
       })
 
-      wait.for.event(waiter, 'continue')
+      deasync.loopWhile(() => rendering)
 
       // Set the string to be the innerHTML of the helper component, but striped of white spaces and Vue's automatically added data-v attributes.
       html = html.replace('<div data-server-rendered="true" class="emulated-translate-V9rNk0G5Rj">', '').slice(0, -('</div>'.length))
