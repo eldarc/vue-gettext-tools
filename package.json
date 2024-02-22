@@ -1,9 +1,9 @@
 {
-  "name": "vue-gettext-tools",
+  "name": "@kngai/vue-gettext-tools",
   "version": "0.0.7",
-  "description": "Gettext tools for Vue.js to help extract strings and compile gettext files.",
-  "repository": "git@github.com:eldarc/vue-gettext-tools.git",
-  "author": "Eldar Cejvanovic <eldar.cejvanovic@gmail.com>",
+  "description": "Modified version of Gettext tools from eldarc/vue-gettext-tools for Vue.js to help extract strings and compile gettext files.",
+  "repository": "git@github.com:kngai/vue-gettext-tools.git",
+  "author": "Kevin Ngai <kevin.ngai@ec.gc.ca>",
   "license": "MIT",
   "scripts": {
     "build": "gulp",
